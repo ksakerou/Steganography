@@ -13,6 +13,9 @@ fin.close()
 src = Image.open(srcfile)
 srcpx = src.load()
 
+#Коррекция данных под носитель
+data16 = data16[:src.width*src.height - 3] + "000"
+
 #Формирование выходного изображения
 res = Image.new("RGB", src.size)
 respx = res.load()
@@ -21,6 +24,7 @@ respx = res.load()
 i = 0
 for x in range(src.width):
     for y in range(src.height):
+        
         if i < len(data16):
             tmp = rgb2hex(srcpx[x,y])
             tmp = tmp[:5] + data16[i]
@@ -28,7 +32,6 @@ for x in range(src.width):
             i = i + 1
         else:
             respx[x,y] = srcpx[x,y]
-
 
 res = res.save(encfile)
 

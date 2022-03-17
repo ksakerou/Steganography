@@ -1,4 +1,4 @@
-datafile = "dataset/hexed/hxd_wnp.txt"
-srcfile = "srcset/ex.jpg"
-encfile = "classified/trojanwnp.png"
-decfile = "declassified/decwnp.txt"
+datafile = "dataset/hexed/hxd_iona.txt"
+srcfile = "srcset/better.jpg"
+encfile = "classified/iona.png"
+decfile = "declassified/decoded.txt"
