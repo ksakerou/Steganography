@@ -24,6 +24,9 @@ def steganize(user):
         zeros = 8 - len(bin(i)[2:])
         bin_src = bin_src + '0'*zeros + bin(i)[2:]
     
+    if len(bin(len(bin_src))[2:]) > 28:
+        return None
+
     bin_src = '0'*(28-len(bin(len(bin_src))[2:])) + bin(len(bin_src))[2:] + bin_src
 
     pic = Image.open(picpath + user.pic)
@@ -62,22 +65,34 @@ def desteganize(user):
         for y in range(pic.height):
             bin_res = bin_res + getlsb(picpx[x,y])
 
+    if len(bin_res) < 28:
+        return None
+
     res_len = int(bin_res[:28],2)
     bin_res = bin_res[28:28 + res_len]
-    
+
+    if len(bin_res) % 8 != 0:
+        return None
+
     res = []
     
     for i in range(0, len(bin_res), 8):
         res.append(int(bin_res[i:i + 8], 2))
     
     res = bytes(res)
+    
+    if res.find(ord('0')) == -1:
+        return None
+    
     file_name = str(user.id) + str(res[:res.find(ord('0'))])[2:-1]
+    
     res = res[res.find(ord('0')) + 1:]
     
     with open(srcpath + file_name, 'wb') as fileout:
         fileout.write(res)
 
     return open(srcpath + file_name,'rb')
+
 
 def genpic(file_name, sizes):
     expic = Image.open(picpath + ex_pic)

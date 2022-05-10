@@ -68,8 +68,11 @@ def get_stor(msg):
 def send_info(user):
     try:
         decoded_file = desteganize(user)
-        db.add_src(user.id, decoded_file.name[decoded_file.name.rfind('/') + 1:])
-        bot.send_document(user.id, decoded_file)
+        if decoded_file == None:
+            bot.send_message(user.id, 'Ошибка - файл не является носителем.')
+        else:
+            db.add_src(user.id, decoded_file.name[decoded_file.name.rfind('/') + 1:])
+            bot.send_document(user.id, decoded_file)
 
     except Exception as e:
         bot.send_message(user.id, f'Ошибка - {e}')
@@ -207,7 +210,7 @@ def send_stor(user):
             os.remove(incoded_file.name)
 
         else:
-            bot.send_message(user.id, 'Файл информации слишком большой для данной картинки. Попробуйте его уменьшить либо увеличить разрешение изображения.')
+            bot.send_message(user.id, 'Файл информации слишком большой.')
             
     except Exception as e:
         bot.send_message(user.id, f'Ошибка - {e}')
